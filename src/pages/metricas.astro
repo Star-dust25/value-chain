@@ -83,8 +83,11 @@ const teamLoadData = [
 
                 <div class="charts-grid">
                     <!-- CSS Bar Chart -->
-                    <div class="chart-card">
-                        <h3>Distribución de Tareas por Eslabón</h3>
+                    <div class="chart-card interactive-chart" data-kpi-title="Distribución de Tareas por Eslabón" data-kpi-value="" data-kpi-desc="Muestra cuántas iniciativas o tareas están actualmente en cada fase de la Cadena de Valor de ITIL 4." data-kpi-impact="Nos permite identificar cuellos de botella. Si hay muchas tareas en 'Obtain/Build', significa que el equipo de Desarrollo está saturado y el flujo de valor se está frenando, lo que requiere rebalancear recursos.">
+                        <div class="chart-header-interact">
+                            <h3>Distribución de Tareas por Eslabón</h3>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                        </div>
                         <p class="chart-desc">Carga actual de trabajo en cada fase de ITIL</p>
                         
                         <div class="css-bar-chart">
@@ -105,8 +108,11 @@ const teamLoadData = [
                     </div>
 
                     <!-- Horizontal Progress Chart -->
-                    <div class="chart-card">
-                        <h3>Carga Operativa por Equipo</h3>
+                    <div class="chart-card interactive-chart" data-kpi-title="Carga Operativa por Equipo" data-kpi-value="" data-kpi-desc="Indica el porcentaje de capacidad de trabajo que cada equipo (Desarrollo, Soporte, Infraestructura) está utilizando actualmente." data-kpi-impact="Ayuda a balancear el esfuerzo y prevenir el 'burnout'. Si Desarrollo está al 85% y Soporte al 45%, podemos pausar nuevas demandas hasta que el equipo de Desarrollo libere capacidad, manteniendo un flujo de trabajo sostenible.">
+                        <div class="chart-header-interact">
+                            <h3>Carga Operativa por Equipo</h3>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                        </div>
                         <p class="chart-desc">Porcentaje de capacidad utilizada</p>
                         
                         <div class="horizontal-bars">
@@ -344,6 +350,7 @@ const teamLoadData = [
         justify-content: flex-end;
         width: 12%;
         z-index: 1;
+        position: relative;
     }
 
     .bar {
@@ -364,16 +371,38 @@ const teamLoadData = [
         font-weight: bold;
     }
 
+    .chart-card.interactive-chart {
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .chart-card.interactive-chart:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        border-color: var(--accent-color);
+    }
+
+    .chart-header-interact {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 5px;
+    }
+
+    .chart-header-interact h3 {
+        margin: 0;
+    }
+
     .bar-label {
         position: absolute;
-        bottom: -25px;
-        font-size: 0.7rem;
+        top: 100%;
+        margin-top: 8px;
+        font-size: 0.75rem;
         color: #666;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        max-width: 60px;
         text-align: center;
+        width: 150%;
+        left: -25%;
+        line-height: 1.2;
     }
 
     /* Horizontal Progress Chart */
@@ -621,16 +650,26 @@ const teamLoadData = [
         const modal = document.getElementById('kpiModal');
         const overlay = document.getElementById('kpiModalOverlay');
         const closeBtn = document.getElementById('kpiModalClose');
-        const kpiCards = document.querySelectorAll('.interactive-kpi');
+        const kpiCards = document.querySelectorAll('.interactive-kpi, .interactive-chart');
 
         const titleEl = document.getElementById('kpiModalTitle');
         const valueEl = document.getElementById('kpiModalValue');
         const descEl = document.getElementById('kpiModalDesc');
         const impactEl = document.getElementById('kpiModalImpact');
+        const highlightDiv = document.querySelector('.kpi-modal-highlight');
 
         const openModal = (title, value, desc, impact) => {
             if (titleEl) titleEl.textContent = title;
-            if (valueEl) valueEl.textContent = value;
+            
+            if (valueEl && highlightDiv) {
+                if (value) {
+                    valueEl.textContent = value;
+                    highlightDiv.style.display = 'block';
+                } else {
+                    highlightDiv.style.display = 'none';
+                }
+            }
+
             if (descEl) descEl.textContent = desc;
             if (impactEl) impactEl.textContent = impact;
 
