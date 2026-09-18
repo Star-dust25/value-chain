@@ -121,7 +121,7 @@ const { title } = Astro.props;
 	/* Layout Grid container */
 	.dashboard-layout {
 		display: flex;
-		height: 100vh;
+		height: 100dvh; /* use dvh for mobile browsers */
 		overflow: hidden;
 	}
 
@@ -129,7 +129,7 @@ const { title } = Astro.props;
 		flex: 1;
 		display: flex;
 		flex-direction: column;
-		height: 100vh;
+		height: 100dvh;
 		overflow-y: auto;
 	}
 </style>
