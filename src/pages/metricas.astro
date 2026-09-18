@@ -97,7 +97,7 @@ const teamLoadData = [
                             <div class="chart-bars">
                                 {barChartData.map(item => (
                                     <div class="bar-wrapper">
-                                        <div class="bar" style={`height: ${item.value}%; background-color: ${item.color};`}>
+                                        <div class="bar" style={`--val: ${item.value}%; background-color: ${item.color};`}>
                                             <span class="bar-value">{item.value}</span>
                                         </div>
                                         <span class="bar-label">{item.label}</span>
