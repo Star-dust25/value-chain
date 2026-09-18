@@ -139,6 +139,7 @@ import Header from '../components/Header.astro';
         display: inline-block;
         width: 50px;
         height: 28px;
+        flex-shrink: 0;
     }
 
     .toggle-switch input {
@@ -178,5 +179,18 @@ import Header from '../components/Header.astro';
 
     input:checked + .slider:before {
         transform: translateX(22px);
+    }
+    
+    @media (max-width: 768px) {
+        .dashboard-content {
+            padding: 20px;
+            padding-bottom: 40px;
+        }
+        .settings-container {
+            padding: 20px;
+        }
+        .setting-info {
+            padding-right: 15px;
+        }
     }
 </style>

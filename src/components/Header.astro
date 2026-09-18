@@ -70,7 +70,7 @@
                 </svg>
             </button>
             
-            <div class="dropdown-menu" id="profileMenu">
+            <div class="dropdown-menu profile-menu" id="profileMenu">
                 <a href="/perfil" class="dropdown-item">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                     Mi Perfil
@@ -398,6 +398,16 @@
         .header-actions {
             width: auto;
             justify-content: flex-end;
+        }
+        
+        .notifications-menu {
+            width: 300px;
+            max-width: calc(100vw - 30px);
+            right: -60px; /* Shift to fit screen */
+        }
+        
+        .profile-menu {
+            right: -10px;
         }
     }
 </style>
