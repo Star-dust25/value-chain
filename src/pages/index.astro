@@ -1,0 +1,317 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import Header from '../components/Header.astro';
+import MetricCard from '../components/MetricCard.astro';
+import ValueChainBoard from '../components/ValueChainBoard.astro';
+import ProjectModal from '../components/ProjectModal.astro';
+---
+
+<Layout title="Service Value Chain Dashboard">
+    <div class="dashboard-layout">
+        <Sidebar />
+        
+        <div class="main-content">
+            <Header />
+            
+            <main class="dashboard-content">
+                <div class="dashboard-header">
+                    <h1>Resumen de la Cadena de Valor</h1>
+                    <p>Métricas y estado de proyectos alineados a ITIL 4</p>
+                </div>
+
+                <div class="metrics-grid">
+                    <MetricCard 
+                        title="Servicios Activos" 
+                        value="12" 
+                        trend="+2 este mes" 
+                        isPositive={true} 
+                        description="El número total de servicios de TI que actualmente están en operación y aportando valor al negocio de FastTrack Delivery."
+                        impact="Un aumento en servicios activos demuestra que el flujo de trabajo de la Cadena de Valor (desde la demanda hasta la entrega) está funcionando fluidamente y generando nuevos productos rentables."
+                    />
+                    <MetricCard 
+                        title="Proyectos en Curso" 
+                        value="8" 
+                        trend="3 en riesgo" 
+                        isPositive={false} 
+                        description="Iniciativas que están transitando por alguna fase de la Cadena de Valor (Diseño, Transición, Construcción)."
+                        impact="Tener 8 proyectos en curso muestra un flujo de trabajo constante, pero el hecho de tener '3 en riesgo' requiere priorización. ITIL nos permite identificar estos cuellos de botella temprano."
+                    />
+                    <MetricCard 
+                        title="Tasa de Resolución" 
+                        value="94%" 
+                        trend="+1.5% vs mes anterior" 
+                        isPositive={true} 
+                        description="El porcentaje de incidentes o fallos que el equipo de Soporte logra resolver exitosamente en el tiempo acordado (SLA)."
+                        impact="Alcanzar un 94% significa que la operación (fase de Entrega y Soporte de ITIL) es sumamente eficiente, lo que se traduce directamente en clientes satisfechos que pueden seguir usando la app sin problemas."
+                    />
+                    <MetricCard 
+                        title="Valor Entregado (YTD)" 
+                        value="$2.4M" 
+                        trend="En objetivo" 
+                        isPositive={true} 
+                        description="El retorno de inversión o beneficio económico estimado que las nuevas funcionalidades o servicios le han generado a la empresa este año."
+                        impact="ITIL 4 se enfoca en 'Co-creación de Valor'. Esta cifra es la prueba de que TI ya no es un 'centro de costos' para la empresa, sino un motor fundamental que genera ganancias."
+                    />
+                </div>
+
+                <div class="board-section">
+                    <ValueChainBoard />
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <ProjectModal />
+</Layout>
+
+<style>
+    .dashboard-content {
+        padding: 30px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .dashboard-header {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .dashboard-header p {
+        margin: 0;
+        color: #666;
+        font-size: 0.95rem;
+    }
+
+    .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 20px;
+    }
+
+    .board-section {
+        flex: 1;
+        min-height: 400px; /* Ensure some minimum height */
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-content {
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .metrics-grid {
+            grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+        }
+    }
+
+    /* Modal Styles */
+    .kpi-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: 2000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(3px);
+    }
+
+    .kpi-modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .kpi-modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -45%);
+        background-color: var(--card-bg);
+        border-radius: 16px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        border: none;
+        width: 90%;
+        max-width: 500px;
+        padding: 0;
+        z-index: 2001;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        margin: 0;
+    }
+
+    .kpi-modal.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translate(-50%, -50%);
+    }
+
+    .kpi-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 25px;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .kpi-modal-header h2 {
+        font-size: 1.25rem;
+        margin: 0;
+    }
+
+    .kpi-modal-close {
+        background: none;
+        border: none;
+        color: #999;
+        cursor: pointer;
+        padding: 5px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+
+    .kpi-modal-close:hover {
+        background-color: #f5f5f5;
+        color: #333;
+    }
+
+    .kpi-modal-body {
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .kpi-modal-highlight {
+        text-align: center;
+        padding: 15px;
+        background-color: rgba(146, 183, 117, 0.1);
+        border-radius: 10px;
+        border: 1px dashed rgba(146, 183, 117, 0.4);
+    }
+
+    .kpi-modal-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        font-family: var(--font-heading);
+        color: var(--primary-color);
+    }
+
+    .kpi-modal-section h3 {
+        font-size: 0.95rem;
+        color: #555;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .kpi-modal-section p {
+        margin: 0;
+        color: #444;
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    .impact-section {
+        padding-top: 15px;
+        border-top: 1px dashed #eee;
+    }
+
+    .impact-section h3 {
+        color: var(--accent-color);
+    }
+</style>
+
+<!-- KPI Explanation Modal for index -->
+<div class="kpi-modal-overlay" id="kpiModalOverlay"></div>
+<div class="kpi-modal" id="kpiModal">
+    <div class="kpi-modal-header">
+        <h2 id="kpiModalTitle">Título KPI</h2>
+        <button class="kpi-modal-close" id="kpiModalClose" aria-label="Cerrar modal">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+    </div>
+    <div class="kpi-modal-body">
+        <div class="kpi-modal-highlight">
+            <span id="kpiModalValue" class="kpi-modal-value">Valor</span>
+        </div>
+        
+        <div class="kpi-modal-section">
+            <h3>¿Qué significa esto?</h3>
+            <p id="kpiModalDesc">Descripción del KPI.</p>
+        </div>
+        
+        <div class="kpi-modal-section impact-section">
+            <h3>¿Qué implica para el negocio?</h3>
+            <p id="kpiModalImpact">Impacto del KPI.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById('kpiModal');
+        const overlay = document.getElementById('kpiModalOverlay');
+        const closeBtn = document.getElementById('kpiModalClose');
+        const kpiCards = document.querySelectorAll('.interactive-kpi');
+
+        const titleEl = document.getElementById('kpiModalTitle');
+        const valueEl = document.getElementById('kpiModalValue');
+        const descEl = document.getElementById('kpiModalDesc');
+        const impactEl = document.getElementById('kpiModalImpact');
+
+        const openModal = (title, value, desc, impact) => {
+            if (titleEl) titleEl.textContent = title;
+            if (valueEl) valueEl.textContent = value;
+            if (descEl) descEl.textContent = desc;
+            if (impactEl) impactEl.textContent = impact;
+
+            if (modal && overlay) {
+                modal.classList.add('active');
+                overlay.classList.add('active');
+            }
+        };
+
+        const closeModal = () => {
+            if (modal && overlay) {
+                modal.classList.remove('active');
+                overlay.classList.remove('active');
+            }
+        };
+
+        kpiCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const title = card.getAttribute('data-kpi-title') || '';
+                const value = card.getAttribute('data-kpi-value') || '';
+                const desc = card.getAttribute('data-kpi-desc') || '';
+                const impact = card.getAttribute('data-kpi-impact') || '';
+                openModal(title, value, desc, impact);
+            });
+        });
+
+        if (closeBtn) closeBtn.addEventListener('click', closeModal);
+        if (overlay) overlay.addEventListener('click', closeModal);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    });
+</script>

@@ -1,0 +1,173 @@
+---
+const pathname = Astro.url.pathname;
+---
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <div class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="var(--accent-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2 17L12 22L22 17" stroke="var(--accent-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2 12L12 17L22 12" stroke="var(--accent-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <h2>ITIL Flow</h2>
+        </div>
+    </div>
+
+    <nav class="sidebar-nav">
+        <ul>
+            <li>
+                <a href="/" class={pathname === '/' ? 'active' : ''}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="/proyectos" class={pathname === '/proyectos' || pathname === '/proyectos/' ? 'active' : ''}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                    <span>Proyectos</span>
+                </a>
+            </li>
+            <li>
+                <a href="/metricas" class={pathname === '/metricas' || pathname === '/metricas/' ? 'active' : ''}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+                    <span>Métricas ITIL</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</aside>
+
+<style>
+    .sidebar {
+        width: 250px;
+        background-color: var(--primary-color);
+        color: var(--text-light);
+        display: flex;
+        flex-direction: column;
+        transition: width 0.3s ease, transform 0.3s ease;
+        flex-shrink: 0;
+        z-index: 1000;
+    }
+
+    .sidebar.collapsed {
+        width: 70px;
+    }
+
+    .sidebar-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px;
+        height: 70px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        overflow: hidden;
+    }
+
+    .logo h2 {
+        color: var(--text-light);
+        font-size: 1.25rem;
+        white-space: nowrap;
+        margin: 0;
+    }
+
+    .sidebar.collapsed .logo h2 {
+        display: none;
+    }
+
+    .toggle-btn {
+        background: none;
+        border: none;
+        color: var(--text-light);
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .toggle-btn:hover {
+        color: var(--accent-color);
+    }
+
+    .sidebar-nav {
+        padding: 20px 0;
+        flex: 1;
+    }
+
+    .sidebar-nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .sidebar-nav li {
+        margin-bottom: 5px;
+    }
+
+    .sidebar-nav a {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 12px 20px;
+        color: rgba(243, 232, 211, 0.7);
+        font-family: var(--font-heading);
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    .sidebar-nav a:hover, .sidebar-nav a.active {
+        background-color: rgba(146, 183, 117, 0.1);
+        color: var(--accent-color);
+        border-left: 4px solid var(--accent-color);
+        padding-left: 16px;
+    }
+
+    .sidebar.collapsed .sidebar-nav a span {
+        display: none;
+    }
+
+    @media (max-width: 768px) {
+        .sidebar {
+            position: fixed;
+            height: 100vh;
+            transform: translateX(-100%);
+        }
+        
+        .sidebar.mobile-open {
+            transform: translateX(0);
+            width: 250px;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+
+        if (sidebarToggle && sidebar) {
+            sidebarToggle.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.toggle('mobile-open');
+                } else {
+                    sidebar.classList.toggle('collapsed');
+                }
+            });
+        }
+        
+        // If mobile, close sidebar after click on a link
+        const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768 && sidebar) {
+                    sidebar.classList.remove('mobile-open');
+                }
+            });
+        });
+    });
+</script>

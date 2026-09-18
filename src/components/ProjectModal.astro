@@ -1,0 +1,246 @@
+---
+---
+<div class="modal-overlay" id="projectModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modalTitle">Detalles del Proyecto</h2>
+            <button class="close-btn" id="closeModalBtn" aria-label="Cerrar modal">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-detail-group">
+                <label>Líder Asignado</label>
+                <div class="detail-value" id="modalOwner">--</div>
+            </div>
+            <div class="modal-detail-group">
+                <label>Fase Actual (ITIL 4 Value Chain)</label>
+                <div class="detail-value highlight" id="modalPhase">--</div>
+            </div>
+            <div class="modal-detail-group">
+                <label>Descripción</label>
+                <p class="detail-text">
+                    Este proyecto busca mejorar los procesos internos mediante la implementación de nuevas tecnologías alineadas a las mejores prácticas de ITIL 4. El objetivo es optimizar la creación de valor en cada etapa.
+                </p>
+            </div>
+            <div class="modal-detail-group">
+                <label>Fecha de Inicio</label>
+                <div class="detail-value">01/09/2026</div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" id="cancelModalBtn">Cerrar</button>
+            <a href="/documentacion" class="btn-primary" id="docsBtn" style="text-decoration: none; display: inline-block;">Ver Documentación Completa</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(19, 50, 21, 0.7); /* Using primary color with opacity */
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .modal-overlay.open {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .modal-content {
+        background-color: var(--card-bg);
+        width: 90%;
+        max-width: 600px;
+        border-radius: 12px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        transform: translateY(20px) scale(0.95);
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        max-height: 90vh;
+    }
+
+    .modal-overlay.open .modal-content {
+        transform: translateY(0) scale(1);
+    }
+
+    .modal-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .modal-header h2 {
+        font-size: 1.25rem;
+        color: var(--primary-color);
+        margin: 0;
+    }
+
+    .close-btn {
+        background: none;
+        border: none;
+        color: #999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px;
+        border-radius: 4px;
+    }
+
+    .close-btn:hover {
+        background-color: #f5f5f5;
+        color: #d32f2f;
+    }
+
+    .modal-body {
+        padding: 24px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .modal-detail-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .modal-detail-group label {
+        font-size: 0.85rem;
+        color: #666;
+        font-weight: 600;
+        font-family: var(--font-heading);
+    }
+
+    .detail-value {
+        font-size: 1rem;
+        color: var(--text-color);
+    }
+
+    .detail-value.highlight {
+        color: var(--accent-color);
+        font-weight: 600;
+        display: inline-block;
+        padding: 4px 12px;
+        background-color: rgba(146, 183, 117, 0.1);
+        border-radius: 20px;
+        width: fit-content;
+    }
+
+    .detail-text {
+        margin: 0;
+        line-height: 1.6;
+        color: #555;
+    }
+
+    .modal-footer {
+        padding: 20px 24px;
+        border-top: 1px solid #eee;
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+    }
+
+    .btn-secondary {
+        background-color: transparent;
+        border: 1px solid #ddd;
+        padding: 10px 20px;
+        border-radius: 6px;
+        color: var(--text-color);
+        font-weight: 500;
+    }
+
+    .btn-secondary:hover {
+        background-color: #f5f5f5;
+        border-color: #ccc;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border: 1px solid var(--primary-color);
+        padding: 10px 20px;
+        border-radius: 6px;
+        color: var(--text-light);
+        font-weight: 500;
+    }
+
+    .btn-primary:hover {
+        background-color: #1a441d;
+        box-shadow: 0 4px 8px rgba(19, 50, 21, 0.2);
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById('projectModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const cancelModalBtn = document.getElementById('cancelModalBtn');
+        const docsBtn = document.getElementById('docsBtn');
+        
+        const modalTitle = document.getElementById('modalTitle');
+        const modalOwner = document.getElementById('modalOwner');
+        const modalPhase = document.getElementById('modalPhase');
+
+        const phaseNames: Record<string, string> = {
+            'plan': 'Plan',
+            'improve': 'Improve',
+            'engage': 'Engage',
+            'design': 'Design & Transition',
+            'build': 'Obtain / Build',
+            'deliver': 'Deliver & Support'
+        };
+
+        const openModal = (data: any) => {
+            if (modal && modalTitle && modalOwner && modalPhase) {
+                modalTitle.textContent = data.title;
+                modalOwner.textContent = data.owner;
+                modalPhase.textContent = phaseNames[data.phase] || data.phase;
+                modal.classList.add('open');
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            }
+        };
+
+        const closeModal = () => {
+            if (modal) {
+                modal.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+        };
+
+        // Listen for custom event from ValueChainBoard
+        document.addEventListener('openProjectModal', ((e: CustomEvent) => {
+            openModal(e.detail);
+        }) as EventListener);
+
+        if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+        if (cancelModalBtn) cancelModalBtn.addEventListener('click', closeModal);
+        
+        // Close on overlay click
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+        }
+
+        // Close on ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+    });
+</script>

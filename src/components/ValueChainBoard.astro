@@ -1,0 +1,730 @@
+---
+const phases = [
+    { id: 'plan', name: 'Plan' },
+    { id: 'improve', name: 'Improve' },
+    { id: 'engage', name: 'Engage' },
+    { id: 'design', name: 'Design & Transition' },
+    { id: 'build', name: 'Obtain / Build' },
+    { id: 'deliver', name: 'Deliver & Support' }
+];
+
+const projects = [
+    {
+        id: 1,
+        title: 'Migración Cloud ERP',
+        owner: 'Ana Silva',
+        currentPhase: 'design',
+        status: 'on-track',
+        progress: 45
+    },
+    {
+        id: 2,
+        title: 'Actualización Portal de Soporte',
+        owner: 'Carlos Ruiz',
+        currentPhase: 'build',
+        status: 'at-risk',
+        progress: 60
+    },
+    {
+        id: 3,
+        title: 'Implementación AI Chatbot',
+        owner: 'María Jones',
+        currentPhase: 'engage',
+        status: 'on-track',
+        progress: 25
+    }
+];
+
+// Helper to determine if a phase is completed, active, or pending
+const getPhaseStatus = (currentPhaseId: string, phaseId: string) => {
+    const currentIndex = phases.findIndex(p => p.id === currentPhaseId);
+    const phaseIndex = phases.findIndex(p => p.id === phaseId);
+    
+    if (phaseIndex < currentIndex) return 'completed';
+    if (phaseIndex === currentIndex) return 'active';
+    return 'pending';
+};
+---
+
+<div class="board-container">
+    <div class="board-header">
+        <h2>Flujo de Valor de Proyectos</h2>
+        <div class="board-actions">
+            <button class="filter-btn" id="infoBtn" aria-label="Información de ITIL">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                Info
+            </button>
+        </div>
+    </div>
+
+    <div class="projects-list">
+        {projects.map((project) => (
+            <div class="project-card" data-project-id={project.id} data-project-title={project.title} data-project-owner={project.owner} data-project-phase={project.currentPhase}>
+                <div class="project-info">
+                    <h3 class="project-title">{project.title}</h3>
+                    <div class="project-meta">
+                        <span class="owner">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            {project.owner}
+                        </span>
+                        <span class={`status-badge ${project.status}`}>
+                            {project.status === 'on-track' ? 'En tiempo' : 'En riesgo'}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="value-chain-tracker">
+                    {phases.map((phase, index) => {
+                        const status = getPhaseStatus(project.currentPhase, phase.id);
+                        return (
+                            <div class={`phase-step ${status}`}>
+                                <div class="step-indicator">
+                                    {status === 'completed' && (
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    )}
+                                    {status === 'active' && (
+                                        <div class="active-dot"></div>
+                                    )}
+                                </div>
+                                <div class="step-line" style={index === phases.length - 1 ? "display: none;" : ""}></div>
+                                <span class="step-label">{phase.name}</span>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        ))}
+    </div>
+</div>
+
+<!-- ITIL Info Modal -->
+<div class="itil-modal-overlay" id="itilModalOverlay"></div>
+<div class="itil-modal" id="itilModal">
+    <div class="itil-modal-header" id="itilModalHeader">
+        <h2>Fases de la Cadena de Valor (ITIL 4)</h2>
+        <div class="header-actions">
+            <button class="itil-modal-btn" id="itilModalPin" aria-label="Fijar modal">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 17v5"/>
+                    <path d="M9 10.5V9a3 3 0 0 1 6 0v1.5a4 4 0 0 0 4 4v1H5v-1a4 4 0 0 0 4-4Z"/>
+                </svg>
+            </button>
+            <button class="itil-modal-btn" id="itilModalClose" aria-label="Cerrar modal">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </div>
+    <div class="itil-modal-body" id="itilModalBody">
+        <div class="itil-phase-desc">
+            <h3>Plan (Planificar)</h3>
+            <p>Asegura una comprensión compartida de la visión, el estado actual y la dirección de mejora en toda la organización. Aquí se alinean los objetivos del proyecto con las metas del negocio.</p>
+        </div>
+        <div class="itil-phase-desc">
+            <h3>Improve (Mejorar)</h3>
+            <p>Garantiza la mejora continua de productos, servicios y prácticas en todas las actividades de la cadena de valor.</p>
+        </div>
+        <div class="itil-phase-desc">
+            <h3>Engage (Involucrar)</h3>
+            <p>Proporciona una buena comprensión de las necesidades de los interesados (stakeholders), fomentando la transparencia y relaciones continuas y positivas.</p>
+        </div>
+        <div class="itil-phase-desc">
+            <h3>Design & Transition (Diseño y Transición)</h3>
+            <p>Asegura que los productos y servicios cumplan continuamente con las expectativas de calidad, costos y tiempo de comercialización.</p>
+        </div>
+        <div class="itil-phase-desc">
+            <h3>Obtain / Build (Obtener / Construir)</h3>
+            <p>Asegura que los componentes del servicio estén disponibles cuándo y dónde se necesiten. Aquí entra todo el desarrollo de software e integración de infraestructura.</p>
+        </div>
+        <div class="itil-phase-desc">
+            <h3>Deliver & Support (Entregar y Soportar)</h3>
+            <p>Garantiza que los servicios se entreguen y soporten de acuerdo con las especificaciones acordadas. Aquí es donde Soporte y Mesa de Ayuda resuelven incidentes reales de los usuarios.</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .board-container {
+        background-color: var(--card-bg);
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        border: 1px solid rgba(0,0,0,0.02);
+    }
+
+    .board-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .board-header h2 {
+        font-size: 1.25rem;
+    }
+
+    .filter-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background-color: transparent;
+        border: 1px solid #ddd;
+        padding: 8px 16px;
+        border-radius: 6px;
+        color: var(--text-color);
+        font-size: 0.85rem;
+    }
+
+    .filter-btn:hover {
+        background-color: #f9f9f9;
+        border-color: #ccc;
+    }
+
+    .projects-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .project-card {
+        border: 1px solid #eee;
+        border-radius: 8px;
+        padding: 20px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        background-color: #fff;
+    }
+
+    .project-card:hover {
+        border-color: var(--accent-color);
+        box-shadow: 0 4px 12px rgba(146, 183, 117, 0.15);
+        transform: translateY(-2px);
+    }
+
+    .project-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 20px;
+    }
+
+    .project-title {
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+        color: var(--primary-color);
+    }
+
+    .project-meta {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .owner {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.85rem;
+        color: #666;
+    }
+
+    .status-badge {
+        font-size: 0.75rem;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-family: var(--font-heading);
+    }
+
+    .status-badge.on-track {
+        background-color: rgba(146, 183, 117, 0.2);
+        color: #2e7d32;
+    }
+
+    .status-badge.at-risk {
+        background-color: rgba(211, 47, 47, 0.1);
+        color: #d32f2f;
+    }
+
+    .value-chain-tracker {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        width: 100%;
+        position: relative;
+        padding-top: 10px;
+    }
+
+    .phase-step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        flex: 1;
+    }
+
+    .step-indicator {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background-color: #eee;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+        transition: all 0.3s ease;
+        border: 2px solid #fff;
+        box-shadow: 0 0 0 2px #eee;
+    }
+
+    .step-line {
+        position: absolute;
+        top: 12px;
+        left: 50%;
+        width: 100%;
+        height: 4px;
+        background-color: #eee;
+        z-index: 1;
+        transition: all 0.3s ease;
+    }
+
+    .step-label {
+        margin-top: 10px;
+        font-size: 0.75rem;
+        color: #888;
+        text-align: center;
+        font-weight: 500;
+        max-width: 80px;
+        line-height: 1.2;
+    }
+
+    /* Completed State */
+    .phase-step.completed .step-indicator {
+        background-color: var(--accent-color);
+        box-shadow: 0 0 0 2px var(--accent-color);
+    }
+    .phase-step.completed .step-line {
+        background-color: var(--accent-color);
+    }
+    .phase-step.completed .step-label {
+        color: var(--primary-color);
+    }
+
+    /* Active State */
+    .phase-step.active .step-indicator {
+        background-color: #fff;
+        box-shadow: 0 0 0 2px var(--accent-color);
+        border: 2px solid #fff;
+    }
+    .active-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: var(--accent-color);
+    }
+    .phase-step.active .step-label {
+        color: var(--primary-color);
+        font-weight: 700;
+    }
+
+    @media (max-width: 768px) {
+        .project-info {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .value-chain-tracker {
+            flex-direction: column;
+            gap: 15px;
+            padding-left: 10px;
+        }
+        
+        .phase-step {
+            flex-direction: row;
+            width: 100%;
+            justify-content: flex-start;
+            gap: 15px;
+        }
+
+        .step-line {
+            top: 24px;
+            left: 11px;
+            width: 4px;
+            height: calc(100% + 15px);
+        }
+
+        .phase-step:last-child .step-line {
+            display: none;
+        }
+
+        .step-label {
+            margin-top: 0;
+            text-align: left;
+            max-width: none;
+        }
+    }
+
+    /* ITIL Modal Styles */
+    .itil-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: 2000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(3px);
+    }
+
+    .itil-modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .itil-modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -45%);
+        background-color: var(--card-bg);
+        border-radius: 16px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        border: none;
+        width: 90%;
+        max-width: 600px;
+        padding: 0;
+        z-index: 2001;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        max-height: 90vh;
+    }
+
+    .itil-modal.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translate(-50%, -50%);
+    }
+
+    /* Widget Mode Styles */
+    .itil-modal.widget-mode {
+        transform: none;
+        top: auto;
+        left: auto;
+        bottom: 20px;
+        right: 20px;
+        width: 320px;
+        max-width: calc(100vw - 40px);
+        max-height: 400px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        border: 1px solid rgba(0,0,0,0.1);
+        transition: opacity 0.3s ease, visibility 0.3s ease, height 0.3s ease;
+    }
+
+    .itil-modal.widget-mode .itil-modal-body {
+        padding: 15px;
+        gap: 12px;
+    }
+    
+    .itil-modal.widget-mode .itil-phase-desc {
+        padding: 10px;
+    }
+    
+    .itil-modal.widget-mode .itil-phase-desc h3 {
+        font-size: 0.95rem;
+        margin-bottom: 5px;
+    }
+    
+    .itil-modal.widget-mode .itil-phase-desc p {
+        font-size: 0.85rem;
+    }
+
+    .itil-modal.widget-mode .itil-modal-header {
+        cursor: move; /* Indicate draggability */
+        padding: 12px 15px;
+        background-color: var(--card-bg);
+        border-radius: 16px 16px 0 0;
+    }
+
+    .itil-modal.widget-mode.collapsed .itil-modal-header {
+        border-radius: 16px;
+        border-bottom: none;
+        cursor: pointer;
+    }
+
+    .itil-modal.widget-mode.collapsed .itil-modal-body {
+        display: none;
+    }
+
+    .itil-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 25px;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        flex-shrink: 0;
+        user-select: none;
+    }
+
+    .itil-modal-header h2 {
+        font-size: 1.15rem;
+        margin: 0;
+        color: var(--primary-color);
+        pointer-events: none;
+    }
+
+    .header-actions {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .itil-modal-btn {
+        background: none;
+        border: none;
+        color: #999;
+        cursor: pointer;
+        padding: 5px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+
+    .itil-modal-btn:hover {
+        background-color: #f5f5f5;
+        color: #333;
+    }
+
+    .itil-modal-btn.active-pin {
+        color: var(--accent-color);
+        background-color: rgba(146, 183, 117, 0.1);
+    }
+
+    .itil-modal-body {
+        padding: 25px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .itil-phase-desc {
+        background-color: rgba(146, 183, 117, 0.05);
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid var(--accent-color);
+    }
+
+    .itil-phase-desc h3 {
+        margin: 0 0 8px 0;
+        font-size: 1rem;
+        color: var(--primary-color);
+    }
+
+    .itil-phase-desc p {
+        margin: 0;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        color: #555;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const projectCards = document.querySelectorAll('.project-card');
+        const infoBtn = document.getElementById('infoBtn');
+        const itilModal = document.getElementById('itilModal');
+        const itilOverlay = document.getElementById('itilModalOverlay');
+        const itilCloseBtn = document.getElementById('itilModalClose');
+        const itilPinBtn = document.getElementById('itilModalPin');
+        const itilHeader = document.getElementById('itilModalHeader');
+        
+        let isWidgetMode = false;
+        let isCollapsed = false;
+
+        // --- Dragging Logic ---
+        let isDragging = false;
+        let hasDragged = false;
+        let initialX;
+        let initialY;
+
+        projectCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const projectId = card.getAttribute('data-project-id');
+                const title = card.getAttribute('data-project-title');
+                const owner = card.getAttribute('data-project-owner');
+                const phase = card.getAttribute('data-project-phase');
+                
+                const event = new CustomEvent('openProjectModal', {
+                    detail: { projectId, title, owner, phase }
+                });
+                document.dispatchEvent(event);
+            });
+        });
+
+        const resetModalPos = () => {
+            if (!itilModal) return;
+            itilModal.style.transform = '';
+            itilModal.style.left = '';
+            itilModal.style.top = '';
+            itilModal.style.right = '';
+            itilModal.style.bottom = '';
+            xOffset = 0;
+            yOffset = 0;
+        };
+
+        const closeItilModal = () => {
+            if (itilModal && itilOverlay) {
+                itilModal.classList.remove('active');
+                itilModal.classList.remove('widget-mode');
+                itilModal.classList.remove('collapsed');
+                itilOverlay.classList.remove('active');
+                if (itilPinBtn) itilPinBtn.classList.remove('active-pin');
+                isWidgetMode = false;
+                isCollapsed = false;
+                resetModalPos();
+            }
+        };
+
+        if (infoBtn && itilModal && itilOverlay) {
+            infoBtn.addEventListener('click', () => {
+                itilModal.classList.add('active');
+                if (!isWidgetMode) {
+                    itilOverlay.classList.add('active');
+                }
+            });
+        }
+
+        if (itilCloseBtn) itilCloseBtn.addEventListener('click', closeItilModal);
+        
+        if (itilOverlay) {
+            itilOverlay.addEventListener('click', () => {
+                if (!isWidgetMode) closeItilModal();
+            });
+        }
+
+        if (itilPinBtn && itilModal && itilOverlay) {
+            itilPinBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // prevent triggering collapse
+                isWidgetMode = !isWidgetMode;
+                
+                if (isWidgetMode) {
+                    itilModal.classList.add('widget-mode');
+                    itilOverlay.classList.remove('active'); // remove blur
+                    itilPinBtn.classList.add('active-pin');
+                    resetModalPos(); // snaps to bottom right initially
+                } else {
+                    itilModal.classList.remove('widget-mode');
+                    itilModal.classList.remove('collapsed');
+                    itilOverlay.classList.add('active'); // add blur back
+                    itilPinBtn.classList.remove('active-pin');
+                    isCollapsed = false;
+                    resetModalPos();
+                }
+            });
+        }
+
+        // Collapse logic
+        if (itilHeader && itilModal) {
+            itilHeader.addEventListener('click', (e) => {
+                if (hasDragged) return; // Prevent collapse if user was dragging
+                
+                // only collapse if we are in widget mode
+                if (isWidgetMode) {
+                    // prevent collapsing if they clicked a button inside header
+                    if (!(e.target as Element).closest('.itil-modal-btn')) {
+                        isCollapsed = !isCollapsed;
+                        if (isCollapsed) {
+                            itilModal.classList.add('collapsed');
+                        } else {
+                            itilModal.classList.remove('collapsed');
+                        }
+                    }
+                }
+            });
+        }
+
+        // Drag events
+        if (itilHeader && itilModal) {
+            itilHeader.addEventListener("mousedown", dragStart);
+            document.addEventListener("mouseup", dragEnd);
+            document.addEventListener("mousemove", drag);
+        }
+
+        function dragStart(e: MouseEvent) {
+            if (!isWidgetMode) return;
+            // Dont drag if clicking buttons
+            if ((e.target as Element).closest('.itil-modal-btn')) return;
+
+            const rect = itilModal!.getBoundingClientRect();
+            
+            // Convert to absolute positioning on first drag
+            if (itilModal!.style.left === '' || itilModal!.style.left === 'auto') {
+                 itilModal!.style.left = `${rect.left}px`;
+                 itilModal!.style.top = `${rect.top}px`;
+                 itilModal!.style.right = 'auto';
+                 itilModal!.style.bottom = 'auto';
+                 itilModal!.style.transform = 'none';
+            }
+
+            // Get click offset relative to the modal's top-left
+            initialX = e.clientX - rect.left;
+            initialY = e.clientY - rect.top;
+
+            isDragging = true;
+            hasDragged = false;
+        }
+
+        function dragEnd() {
+            isDragging = false;
+            // hasDragged reset after a short delay so the click event sees it
+            setTimeout(() => {
+                hasDragged = false;
+            }, 50);
+        }
+
+        function drag(e: MouseEvent) {
+            if (isDragging && isWidgetMode && itilModal) {
+                e.preventDefault();
+                hasDragged = true;
+
+                let newLeft = e.clientX - initialX;
+                let newTop = e.clientY - initialY;
+
+                const rect = itilModal.getBoundingClientRect();
+                const viewportWidth = window.innerWidth;
+                const viewportHeight = window.innerHeight;
+
+                // Enforce boundaries
+                if (newLeft < 0) newLeft = 0;
+                if (newTop < 0) newTop = 0;
+                if (newLeft + rect.width > viewportWidth) newLeft = viewportWidth - rect.width;
+                if (newTop + rect.height > viewportHeight) newTop = viewportHeight - rect.height;
+
+                itilModal.style.left = `${newLeft}px`;
+                itilModal.style.top = `${newTop}px`;
+            }
+        }
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !isWidgetMode) closeItilModal();
+        });
+    });
+</script>

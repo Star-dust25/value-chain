@@ -1,0 +1,669 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import Header from '../components/Header.astro';
+
+const kpis = [
+    { 
+        id: 'kpi-ttm',
+        title: 'Time-to-Market', 
+        value: '-40%', 
+        sub: 'vs semestre anterior', 
+        status: 'positive',
+        description: 'El tiempo que tardamos desde que surge una idea hasta que llega a las manos del cliente final.',
+        impact: 'Al adoptar la Cadena de Valor, eliminamos las demoras burocráticas y los cuellos de botella. Un -40% significa que lanzamos nuevas funcionalidades casi en la mitad del tiempo, respondiendo más rápido a lo que piden nuestros clientes.'
+    },
+    { 
+        id: 'kpi-silos',
+        title: 'Silos Operativos', 
+        value: 'Rotos', 
+        sub: 'Visibilidad end-to-end 100%', 
+        status: 'positive',
+        description: 'La barrera invisible que hacía que el equipo de Desarrollo y el equipo de Soporte trabajaran sin comunicarse entre sí.',
+        impact: 'ITIL nos enseña a trabajar juntos en todas las fases. "Silos Rotos" significa que ahora Soporte sabe exactamente qué está construyendo Desarrollo, y Desarrollo recibe información directa de Soporte sobre qué cosas fallan más para los usuarios.'
+    },
+    { 
+        id: 'kpi-incidentes',
+        title: 'Incidentes Post-Lanzamiento', 
+        value: '12', 
+        sub: 'Reducción del 65%', 
+        status: 'positive',
+        description: 'La cantidad de problemas o caídas graves del sistema que reportan los clientes inmediatamente después de lanzar una actualización.',
+        impact: 'Al integrar pruebas tempranas y capacitar a Soporte antes de lanzar (como recomienda ITIL en la fase de "Transición"), hemos evitado que los errores lleguen al usuario final. Caer un 65% significa clientes mucho más felices.'
+    },
+    { 
+        id: 'kpi-riesgo',
+        title: 'Proyectos en Riesgo', 
+        value: '1', 
+        sub: 'Requiere atención', 
+        status: 'warning',
+        description: 'Proyectos clave que están retrasados o enfrentan problemas técnicos que amenazan con no entregar valor a tiempo.',
+        impact: 'Tener solo 1 proyecto en riesgo en lugar de varios significa que ahora tenemos visibilidad en tiempo real para intervenir y ayudar al equipo antes de que sea demasiado tarde.'
+    }
+];
+
+const barChartData = [
+    { label: 'Engage', value: 15, color: '#133215' },
+    { label: 'Plan', value: 25, color: '#2a5a2e' },
+    { label: 'Design & Trans.', value: 45, color: '#4d8c52' },
+    { label: 'Obtain/Build', value: 80, color: '#92B775' },
+    { label: 'Deliver & Support', value: 30, color: '#b9d6a3' },
+    { label: 'Improve', value: 10, color: '#e0ebd8' }
+];
+
+const teamLoadData = [
+    { team: 'Desarrollo', load: 85 },
+    { team: 'Soporte', load: 45 },
+    { team: 'Infraestructura', load: 60 }
+];
+---
+
+<Layout title="Métricas ITIL - Service Value Chain Dashboard">
+    <div class="dashboard-layout">
+        <Sidebar />
+        
+        <div class="main-content">
+            <Header />
+            
+            <main class="dashboard-content">
+                <div class="dashboard-header">
+                    <h1>Métricas de Impacto ITIL</h1>
+                    <p>KPIs de rendimiento tras la adopción de la Cadena de Valor (Caso FastTrack Delivery)</p>
+                </div>
+
+                <div class="kpi-grid">
+                    {kpis.map(kpi => (
+                        <div class="kpi-card interactive-kpi" data-kpi-id={kpi.id} data-kpi-title={kpi.title} data-kpi-value={kpi.value} data-kpi-desc={kpi.description} data-kpi-impact={kpi.impact}>
+                            <div class="kpi-title">{kpi.title}</div>
+                            <div class={`kpi-value ${kpi.status}`}>{kpi.value}</div>
+                            <div class="kpi-sub">{kpi.sub}</div>
+                        </div>
+                    ))}
+                </div>
+
+                <div class="charts-grid">
+                    <!-- CSS Bar Chart -->
+                    <div class="chart-card">
+                        <h3>Distribución de Tareas por Eslabón</h3>
+                        <p class="chart-desc">Carga actual de trabajo en cada fase de ITIL</p>
+                        
+                        <div class="css-bar-chart">
+                            <div class="chart-y-axis">
+                                <span>100</span><span>75</span><span>50</span><span>25</span><span>0</span>
+                            </div>
+                            <div class="chart-bars">
+                                {barChartData.map(item => (
+                                    <div class="bar-wrapper">
+                                        <div class="bar" style={`height: ${item.value}%; background-color: ${item.color};`}>
+                                            <span class="bar-value">{item.value}</span>
+                                        </div>
+                                        <span class="bar-label">{item.label}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Horizontal Progress Chart -->
+                    <div class="chart-card">
+                        <h3>Carga Operativa por Equipo</h3>
+                        <p class="chart-desc">Porcentaje de capacidad utilizada</p>
+                        
+                        <div class="horizontal-bars">
+                            {teamLoadData.map(item => (
+                                <div class="h-bar-item">
+                                    <div class="h-bar-header">
+                                        <span class="h-bar-name">{item.team}</span>
+                                        <span class="h-bar-value">{item.load}%</span>
+                                    </div>
+                                    <div class="h-bar-track">
+                                        <div class="h-bar-fill" style={`width: ${item.load}%; background-color: ${item.load > 80 ? '#f44336' : 'var(--accent-color)'};`}></div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div class="chart-card full-width">
+                        <h3>Evolución: Tiempo de Resolución de Incidentes</h3>
+                        <p class="chart-desc">Cómo la integración de Soporte en fases tempranas redujo el tiempo (simulación)</p>
+                        
+                        <!-- Simple Line Chart Simulation via CSS Flex and SVG-like logic -->
+                        <div class="trend-chart-wrapper">
+                            <div class="trend-stats">
+                                <div class="stat-box">
+                                    <span class="stat-label">Antes de ITIL</span>
+                                    <span class="stat-number danger">72h</span>
+                                </div>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                <div class="stat-box">
+                                    <span class="stat-label">Actual (C. de Valor)</span>
+                                    <span class="stat-number success">14h</span>
+                                </div>
+                            </div>
+                            
+                            <div class="trend-explanation">
+                                <p><strong>¿Por qué esta mejora?</strong> Al involucrar al equipo de Soporte desde la fase de "Entregar y Soportar" antes del lanzamiento, el equipo ya cuenta con la documentación y capacitación necesaria (rompiendo el silo anterior). Cuando los usuarios reportan un fallo en la app FastTrack, el equipo sabe exactamente qué responder o cómo escalar el ticket a Desarrollo.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- KPI Explanation Modal -->
+    <div class="kpi-modal-overlay" id="kpiModalOverlay"></div>
+    <div class="kpi-modal" id="kpiModal">
+        <div class="kpi-modal-header">
+            <h2 id="kpiModalTitle">Título KPI</h2>
+            <button class="kpi-modal-close" id="kpiModalClose" aria-label="Cerrar modal">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="kpi-modal-body">
+            <div class="kpi-modal-highlight">
+                <span id="kpiModalValue" class="kpi-modal-value">Valor</span>
+            </div>
+            
+            <div class="kpi-modal-section">
+                <h3>¿Qué significa esto?</h3>
+                <p id="kpiModalDesc">Descripción del KPI.</p>
+            </div>
+            
+            <div class="kpi-modal-section impact-section">
+                <h3>¿Qué implica para el negocio?</h3>
+                <p id="kpiModalImpact">Impacto del KPI.</p>
+            </div>
+        </div>
+    </div>
+</Layout>
+
+<style>
+    .dashboard-content {
+        padding: 30px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+        overflow-y: auto;
+    }
+
+    .dashboard-header {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 1.8rem;
+        color: var(--primary-color);
+    }
+
+    .dashboard-header p {
+        margin: 0;
+        color: #666;
+        font-size: 0.95rem;
+    }
+
+    /* KPIs */
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    .kpi-card {
+        background-color: var(--card-bg);
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        border: 1px solid rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .kpi-card.interactive-kpi {
+        cursor: pointer;
+    }
+
+    .kpi-card.interactive-kpi:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        border-color: var(--accent-color);
+    }
+
+    .kpi-title {
+        color: #666;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    .kpi-value {
+        font-size: 2rem;
+        font-family: var(--font-heading);
+        font-weight: 700;
+        line-height: 1.1;
+    }
+
+    .kpi-value.positive { color: #2e7d32; }
+    .kpi-value.warning { color: #f57c00; }
+    
+    .kpi-sub {
+        font-size: 0.8rem;
+        color: #999;
+    }
+
+    /* Charts Grid */
+    .charts-grid {
+        display: grid;
+        grid-template-columns: 3fr 2fr;
+        gap: 20px;
+    }
+
+    .chart-card {
+        background-color: var(--card-bg);
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        border: 1px solid rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chart-card.full-width {
+        grid-column: 1 / -1;
+    }
+
+    .chart-card h3 {
+        margin: 0 0 5px 0;
+        font-size: 1.1rem;
+        color: var(--primary-color);
+    }
+
+    .chart-desc {
+        margin: 0 0 20px 0;
+        font-size: 0.85rem;
+        color: #777;
+    }
+
+    /* CSS Bar Chart */
+    .css-bar-chart {
+        display: flex;
+        height: 250px;
+        gap: 10px;
+        margin-top: auto;
+    }
+
+    .chart-y-axis {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding-bottom: 25px; /* space for labels */
+        color: #999;
+        font-size: 0.75rem;
+        text-align: right;
+        min-width: 25px;
+    }
+
+    .chart-bars {
+        flex: 1;
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-end;
+        border-bottom: 1px solid #eee;
+        border-left: 1px solid #eee;
+        padding: 0 10px;
+        position: relative;
+    }
+
+    /* Grid lines */
+    .chart-bars::before, .chart-bars::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background-color: #f5f5f5;
+        z-index: 0;
+    }
+    .chart-bars::before { top: 25%; }
+    .chart-bars::after { top: 50%; }
+    .chart-bars .grid-line-75 { position: absolute; left: 0; right: 0; top: 75%; height: 1px; background-color: #f5f5f5; z-index: 0; }
+
+    .bar-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100%;
+        justify-content: flex-end;
+        width: 12%;
+        z-index: 1;
+    }
+
+    .bar {
+        width: 100%;
+        border-radius: 4px 4px 0 0;
+        transition: height 1s ease-out;
+        position: relative;
+        min-height: 20px;
+    }
+
+    .bar-value {
+        position: absolute;
+        top: -20px;
+        width: 100%;
+        text-align: center;
+        font-size: 0.75rem;
+        color: #555;
+        font-weight: bold;
+    }
+
+    .bar-label {
+        position: absolute;
+        bottom: -25px;
+        font-size: 0.7rem;
+        color: #666;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        max-width: 60px;
+        text-align: center;
+    }
+
+    /* Horizontal Progress Chart */
+    .horizontal-bars {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        justify-content: center;
+        flex: 1;
+    }
+
+    .h-bar-item {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .h-bar-header {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.9rem;
+    }
+
+    .h-bar-name { font-weight: 500; color: #444; }
+    .h-bar-value { font-weight: bold; color: var(--primary-color); }
+
+    .h-bar-track {
+        height: 12px;
+        background-color: #eee;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    .h-bar-fill {
+        height: 100%;
+        border-radius: 6px;
+        transition: width 1s ease-out;
+    }
+
+    /* Trend Chart Simulation */
+    .trend-chart-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        background-color: rgba(146, 183, 117, 0.05);
+        padding: 25px;
+        border-radius: 12px;
+        border: 1px dashed rgba(146, 183, 117, 0.4);
+    }
+
+    .trend-stats {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        flex-shrink: 0;
+    }
+
+    .stat-box {
+        background-color: white;
+        padding: 15px 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+        color: #777;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .stat-number {
+        font-size: 2.2rem;
+        font-weight: bold;
+        font-family: var(--font-heading);
+    }
+
+    .stat-number.danger { color: #f44336; }
+    .stat-number.success { color: #4caf50; }
+
+    .trend-explanation {
+        font-size: 0.95rem;
+        line-height: 1.6;
+        color: #444;
+    }
+
+    .trend-explanation strong {
+        color: var(--primary-color);
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    /* Modal Styles */
+    .kpi-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: 2000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(3px);
+    }
+
+    .kpi-modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .kpi-modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -45%);
+        background-color: var(--card-bg);
+        border-radius: 16px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        border: none;
+        width: 90%;
+        max-width: 500px;
+        padding: 0;
+        z-index: 2001;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        margin: 0;
+    }
+
+    .kpi-modal.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translate(-50%, -50%);
+    }
+
+    .kpi-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 25px;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .kpi-modal-header h2 {
+        font-size: 1.25rem;
+        margin: 0;
+    }
+
+    .kpi-modal-close {
+        background: none;
+        border: none;
+        color: #999;
+        cursor: pointer;
+        padding: 5px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+
+    .kpi-modal-close:hover {
+        background-color: #f5f5f5;
+        color: #333;
+    }
+
+    .kpi-modal-body {
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .kpi-modal-highlight {
+        text-align: center;
+        padding: 15px;
+        background-color: rgba(146, 183, 117, 0.1);
+        border-radius: 10px;
+        border: 1px dashed rgba(146, 183, 117, 0.4);
+    }
+
+    .kpi-modal-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        font-family: var(--font-heading);
+        color: var(--primary-color);
+    }
+
+    .kpi-modal-section h3 {
+        font-size: 0.95rem;
+        color: #555;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .kpi-modal-section p {
+        margin: 0;
+        color: #444;
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    .impact-section {
+        padding-top: 15px;
+        border-top: 1px dashed #eee;
+    }
+
+    .impact-section h3 {
+        color: var(--accent-color);
+    }
+
+    @media (max-width: 1024px) {
+        .charts-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .trend-chart-wrapper {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .bar-label {
+            font-size: 0.6rem;
+            transform: rotate(-45deg);
+            bottom: -30px;
+        }
+        
+        .chart-y-axis {
+            padding-bottom: 35px;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById('kpiModal');
+        const overlay = document.getElementById('kpiModalOverlay');
+        const closeBtn = document.getElementById('kpiModalClose');
+        const kpiCards = document.querySelectorAll('.interactive-kpi');
+
+        const titleEl = document.getElementById('kpiModalTitle');
+        const valueEl = document.getElementById('kpiModalValue');
+        const descEl = document.getElementById('kpiModalDesc');
+        const impactEl = document.getElementById('kpiModalImpact');
+
+        const openModal = (title, value, desc, impact) => {
+            if (titleEl) titleEl.textContent = title;
+            if (valueEl) valueEl.textContent = value;
+            if (descEl) descEl.textContent = desc;
+            if (impactEl) impactEl.textContent = impact;
+
+            if (modal && overlay) {
+                modal.classList.add('active');
+                overlay.classList.add('active');
+            }
+        };
+
+        const closeModal = () => {
+            if (modal && overlay) {
+                modal.classList.remove('active');
+                overlay.classList.remove('active');
+            }
+        };
+
+        kpiCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const title = card.getAttribute('data-kpi-title') || '';
+                const value = card.getAttribute('data-kpi-value') || '';
+                const desc = card.getAttribute('data-kpi-desc') || '';
+                const impact = card.getAttribute('data-kpi-impact') || '';
+                openModal(title, value, desc, impact);
+            });
+        });
+
+        if (closeBtn) closeBtn.addEventListener('click', closeModal);
+        if (overlay) overlay.addEventListener('click', closeModal);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    });
+</script>

@@ -1,0 +1,383 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import Header from '../components/Header.astro';
+
+const projects = [
+    { id: 'PRJ-001', name: 'Rastreo en tiempo real', leader: 'Ana Silva', phase: 'Obtain/Build', status: 'En tiempo', priority: 'Alta', date: '25 Oct 2026' },
+    { id: 'PRJ-002', name: 'App FastTrack V2.0', leader: 'Carlos Ruiz', phase: 'Design & Transition', status: 'Retrasado', priority: 'Alta', date: '10 Nov 2026' },
+    { id: 'PRJ-003', name: 'Integración Pasarela Pagos', leader: 'Luis Gómez', phase: 'Deliver & Support', status: 'En riesgo', priority: 'Media', date: '02 Nov 2026' },
+    { id: 'PRJ-004', name: 'Portal de Soporte B2B', leader: 'Marta Díaz', phase: 'Plan', status: 'En tiempo', priority: 'Baja', date: '15 Dic 2026' },
+    { id: 'PRJ-005', name: 'Chatbot Atención al Cliente', leader: 'Ana Silva', phase: 'Engage', status: 'En tiempo', priority: 'Media', date: '20 Ene 2027' },
+    { id: 'PRJ-006', name: 'Migración Base de Datos', leader: 'Carlos Ruiz', phase: 'Deliver & Support', status: 'En tiempo', priority: 'Alta', date: '30 Oct 2026' }
+];
+
+const getStatusClass = (status) => {
+    if (status === 'En tiempo') return 'status-good';
+    if (status === 'En riesgo') return 'status-warning';
+    if (status === 'Retrasado') return 'status-danger';
+    return '';
+};
+---
+
+<Layout title="Proyectos - Service Value Chain Dashboard">
+    <div class="dashboard-layout">
+        <Sidebar />
+        
+        <div class="main-content">
+            <Header />
+            
+            <main class="dashboard-content">
+                <div class="dashboard-header">
+                    <h1>Proyectos y Servicios</h1>
+                    <p>Listado completo de iniciativas en la Cadena de Valor</p>
+                </div>
+
+                <div class="projects-container">
+                    <div class="table-toolbar">
+                        <div class="search-box">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                            <input type="text" placeholder="Buscar proyecto o líder..." />
+                        </div>
+                        <div class="toolbar-actions">
+                            <button class="btn-outline">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+                                Filtrar
+                            </button>
+                            <button class="btn-primary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                Nuevo Proyecto
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="projects-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre del Proyecto</th>
+                                    <th>Líder (Dueño)</th>
+                                    <th>Eslabón ITIL</th>
+                                    <th>Prioridad</th>
+                                    <th>Estado</th>
+                                    <th>Fecha Estimada</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {projects.map(p => (
+                                    <tr>
+                                        <td class="col-id">{p.id}</td>
+                                        <td class="col-name"><strong>{p.name}</strong></td>
+                                        <td>
+                                            <div class="leader-cell">
+                                                <div class="avatar-sm">{p.leader.split(' ').map(n => n[0]).join('')}</div>
+                                                <span>{p.leader}</span>
+                                            </div>
+                                        </td>
+                                        <td><span class="phase-badge">{p.phase}</span></td>
+                                        <td><span class={`priority-badge p-${p.priority.toLowerCase()}`}>{p.priority}</span></td>
+                                        <td><span class={`status-dot ${getStatusClass(p.status)}`}>{p.status}</span></td>
+                                        <td class="col-date">{p.date}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pagination">
+                        <span class="page-info">Mostrando 1 a 6 de 24 proyectos</span>
+                        <div class="page-controls">
+                            <button disabled>&lt; Anterior</button>
+                            <button class="active">1</button>
+                            <button>2</button>
+                            <button>3</button>
+                            <button>Siguiente &gt;</button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</Layout>
+
+<style>
+    .dashboard-content {
+        padding: 30px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    .dashboard-header {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 1.8rem;
+        color: var(--primary-color);
+    }
+
+    .dashboard-header p {
+        margin: 0;
+        color: #666;
+        font-size: 0.95rem;
+    }
+
+    .projects-container {
+        background-color: var(--card-bg);
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        border: 1px solid rgba(0,0,0,0.05);
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .table-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .search-box {
+        position: relative;
+        width: 100%;
+        max-width: 350px;
+    }
+
+    .search-box svg {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #999;
+    }
+
+    .search-box input {
+        width: 100%;
+        padding: 10px 10px 10px 38px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-family: var(--font-body);
+        font-size: 0.9rem;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+    .search-box input:focus {
+        border-color: var(--accent-color);
+    }
+
+    .toolbar-actions {
+        display: flex;
+        gap: 12px;
+    }
+
+    .btn-outline, .btn-primary {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-outline {
+        background: transparent;
+        border: 1px solid #ddd;
+        color: var(--text-color);
+    }
+
+    .btn-outline:hover {
+        background: #f5f5f5;
+        border-color: #ccc;
+    }
+
+    .btn-primary {
+        background: var(--primary-color);
+        border: 1px solid var(--primary-color);
+        color: var(--text-light);
+    }
+
+    .btn-primary:hover {
+        background: #1a451d;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+        border-radius: 8px;
+        border: 1px solid #eee;
+    }
+
+    .projects-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 900px;
+        text-align: left;
+    }
+
+    .projects-table th {
+        background-color: #f9f9f9;
+        padding: 14px 20px;
+        font-size: 0.85rem;
+        color: #666;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 2px solid #eee;
+    }
+
+    .projects-table td {
+        padding: 16px 20px;
+        border-bottom: 1px solid #eee;
+        vertical-align: middle;
+        font-size: 0.95rem;
+    }
+
+    .projects-table tr:hover {
+        background-color: #fafafa;
+    }
+
+    .col-id {
+        color: #888;
+        font-size: 0.85rem;
+    }
+
+    .col-name strong {
+        color: var(--primary-color);
+        font-weight: 500;
+    }
+
+    .leader-cell {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .avatar-sm {
+        width: 28px;
+        height: 28px;
+        background-color: var(--accent-color);
+        color: var(--primary-color);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .phase-badge {
+        background-color: rgba(146, 183, 117, 0.15);
+        color: var(--primary-color);
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        display: inline-block;
+    }
+
+    .priority-badge {
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+    .p-alta { color: #d32f2f; }
+    .p-media { color: #f57c00; }
+    .p-baja { color: #388e3c; }
+
+    .status-dot {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.85rem;
+    }
+
+    .status-dot::before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .status-good::before { background-color: #4caf50; }
+    .status-warning::before { background-color: #ff9800; }
+    .status-danger::before { background-color: #f44336; }
+
+    .col-date {
+        color: #555;
+        font-size: 0.85rem;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 10px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .page-info {
+        font-size: 0.85rem;
+        color: #666;
+    }
+
+    .page-controls {
+        display: flex;
+        gap: 5px;
+    }
+
+    .page-controls button {
+        background: white;
+        border: 1px solid #ddd;
+        padding: 6px 12px;
+        border-radius: 6px;
+        color: #555;
+        cursor: pointer;
+        font-size: 0.85rem;
+        transition: all 0.2s;
+    }
+
+    .page-controls button:hover:not([disabled]) {
+        background: #f5f5f5;
+    }
+
+    .page-controls button.active {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+    }
+
+    .page-controls button[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    @media (max-width: 768px) {
+        .table-toolbar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .search-box {
+            max-width: 100%;
+        }
+        .toolbar-actions {
+            justify-content: flex-end;
+        }
+        .pagination {
+            flex-direction: column;
+        }
+    }
+</style>

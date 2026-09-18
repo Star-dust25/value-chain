@@ -1,0 +1,182 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import Header from '../components/Header.astro';
+---
+
+<Layout title="Ajustes - Service Value Chain Dashboard">
+    <div class="dashboard-layout">
+        <Sidebar />
+        
+        <div class="main-content">
+            <Header />
+            
+            <main class="dashboard-content">
+                <div class="dashboard-header">
+                    <h1>Ajustes del Sistema</h1>
+                    <p>Configura las preferencias de tu entorno</p>
+                </div>
+
+                <div class="settings-container">
+                    <div class="settings-section">
+                        <h3>Preferencias de Notificación</h3>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <strong>Notificaciones por Email</strong>
+                                <span>Recibir resumen diario de proyectos en riesgo.</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked disabled>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <strong>Alertas del Sistema</strong>
+                                <span>Mostrar notificaciones in-app.</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked disabled>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3>Apariencia</h3>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <strong>Tema Oscuro</strong>
+                                <span>(No disponible en este prototipo)</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" disabled>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</Layout>
+
+<style>
+    .dashboard-content {
+        padding: 30px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .dashboard-header {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .dashboard-header p {
+        margin: 0;
+        color: #666;
+        font-size: 0.95rem;
+    }
+
+    .settings-container {
+        background-color: var(--card-bg);
+        border-radius: 12px;
+        padding: 40px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        border: 1px solid rgba(0,0,0,0.02);
+        max-width: 800px;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .settings-section h3 {
+        font-size: 1.2rem;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+
+    .setting-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #fafafa;
+    }
+
+    .setting-item:last-child {
+        border-bottom: none;
+    }
+
+    .setting-info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .setting-info strong {
+        color: var(--text-color);
+        font-size: 1rem;
+    }
+
+    .setting-info span {
+        color: #666;
+        font-size: 0.85rem;
+    }
+
+    /* Mockup Toggle Switch */
+    .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 28px;
+    }
+
+    .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: not-allowed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+        opacity: 0.6;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 20px;
+        width: 20px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
+
+    input:checked + .slider {
+        background-color: var(--accent-color);
+    }
+
+    input:checked + .slider:before {
+        transform: translateX(22px);
+    }
+</style>
