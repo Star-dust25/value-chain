@@ -204,4 +204,22 @@ import Header from '../components/Header.astro';
         opacity: 1;
         transform: translateX(-50%) translateY(0);
     }
+
+    @media (max-width: 768px) {
+        .tooltip-text {
+            width: 260px;
+            left: auto;
+            right: -30px; /* adjust relative to icon */
+            transform: translateY(10px);
+        }
+        
+        .tooltip-text::after {
+            left: auto;
+            right: 35px;
+        }
+        
+        .tooltip-container:hover .tooltip-text {
+            transform: translateY(0);
+        }
+    }
 </style>

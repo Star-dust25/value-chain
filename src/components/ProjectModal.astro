@@ -182,6 +182,20 @@
         background-color: #1a441d;
         box-shadow: 0 4px 8px rgba(19, 50, 21, 0.2);
     }
+
+    @media (max-width: 768px) {
+        .modal-footer {
+            flex-direction: column-reverse;
+            align-items: stretch;
+            gap: 10px;
+        }
+
+        .btn-secondary, .btn-primary {
+            width: 100%;
+            text-align: center;
+            justify-content: center;
+        }
+    }
 </style>
 
 <script>
