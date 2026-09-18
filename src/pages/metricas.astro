@@ -355,8 +355,9 @@ const teamLoadData = [
 
     .bar {
         width: 100%;
+        height: var(--val);
         border-radius: 4px 4px 0 0;
-        transition: height 1s ease-out;
+        transition: all 1s ease-out;
         position: relative;
         min-height: 20px;
     }
@@ -621,6 +622,66 @@ const teamLoadData = [
         color: var(--accent-color);
     }
 
+    @media (max-width: 1500px) {
+        .css-bar-chart {
+            flex-direction: column;
+            height: auto;
+            margin-top: 20px;
+        }
+
+        .chart-y-axis {
+            display: none;
+        }
+
+        .chart-bars {
+            flex-direction: column;
+            border: none;
+            padding: 0;
+            gap: 15px;
+            align-items: stretch;
+        }
+
+        .chart-bars::before, .chart-bars::after {
+            display: none;
+        }
+
+        .bar-wrapper {
+            flex-direction: row;
+            width: 100%;
+            height: auto;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 15px;
+        }
+
+        .bar-label {
+            position: relative;
+            top: auto;
+            left: auto;
+            width: 100px;
+            text-align: right;
+            margin: 0;
+            display: block;
+        }
+
+        .bar {
+            height: 24px;
+            width: var(--val);
+            border-radius: 0 4px 4px 0;
+            min-height: auto;
+            transition: width 1s ease-out;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            transform: translate(10px, -50%);
+            width: auto;
+            text-align: left;
+        }
+    }
+
     @media (max-width: 1024px) {
         .charts-grid {
             grid-template-columns: 1fr;
@@ -631,16 +692,6 @@ const teamLoadData = [
         .trend-chart-wrapper {
             flex-direction: column;
             text-align: center;
-        }
-        
-        .bar-label {
-            font-size: 0.6rem;
-            transform: rotate(-45deg);
-            bottom: -30px;
-        }
-        
-        .chart-y-axis {
-            padding-bottom: 35px;
         }
     }
 </style>
