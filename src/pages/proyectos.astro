@@ -4,15 +4,17 @@ import Sidebar from '../components/Sidebar.astro';
 import Header from '../components/Header.astro';
 
 const projects = [
-    { id: 'PRJ-001', name: 'Rastreo en tiempo real', leader: 'Ana Silva', phase: 'Obtain/Build', status: 'En tiempo', priority: 'Alta', date: '25 Oct 2026' },
-    { id: 'PRJ-002', name: 'App FastTrack V2.0', leader: 'Carlos Ruiz', phase: 'Design & Transition', status: 'Retrasado', priority: 'Alta', date: '10 Nov 2026' },
-    { id: 'PRJ-003', name: 'Integración Pasarela Pagos', leader: 'Luis Gómez', phase: 'Deliver & Support', status: 'En riesgo', priority: 'Media', date: '02 Nov 2026' },
-    { id: 'PRJ-004', name: 'Portal de Soporte B2B', leader: 'Marta Díaz', phase: 'Plan', status: 'En tiempo', priority: 'Baja', date: '15 Dic 2026' },
-    { id: 'PRJ-005', name: 'Chatbot Atención al Cliente', leader: 'Ana Silva', phase: 'Engage', status: 'En tiempo', priority: 'Media', date: '20 Ene 2027' },
-    { id: 'PRJ-006', name: 'Migración Base de Datos', leader: 'Carlos Ruiz', phase: 'Deliver & Support', status: 'En tiempo', priority: 'Alta', date: '30 Oct 2026' }
+    { id: 'PRJ-001', name: 'Migración Cloud ERP', leader: 'Ana Silva', phase: 'Design & Transition', status: 'En tiempo', priority: 'Alta', date: '01 Sep 2026' },
+    { id: 'PRJ-002', name: 'Actualización Portal de Soporte', leader: 'Carlos Ruiz', phase: 'Obtain / Build', status: 'En riesgo', priority: 'Alta', date: '15 Sep 2026' },
+    { id: 'PRJ-003', name: 'Implementación AI Chatbot', leader: 'María Jones', phase: 'Engage', status: 'En tiempo', priority: 'Media', date: '20 Sep 2026' },
+    { id: 'PRJ-004', name: 'Auditoría de Seguridad', leader: 'Luis Torres', phase: 'Improve', status: 'En tiempo', priority: 'Baja', date: '05 Oct 2026' },
+    { id: 'PRJ-005', name: 'Renovación Infra. Core', leader: 'Ana Silva', phase: 'Plan', status: 'En tiempo', priority: 'Alta', date: '10 Oct 2026' },
+    { id: 'PRJ-006', name: 'Integración de API Pagos', leader: 'Sofía Castro', phase: 'Obtain / Build', status: 'En riesgo', priority: 'Media', date: '12 Oct 2026' },
+    { id: 'PRJ-007', name: 'Lanzamiento App Rutas', leader: 'Carlos Ruiz', phase: 'Deliver & Support', status: 'En tiempo', priority: 'Alta', date: '25 Oct 2026' },
+    { id: 'PRJ-008', name: 'Dashboard Cadena de Valor', leader: 'Tú', phase: 'Deliver & Support', status: 'En tiempo', priority: 'Media', date: '28 Oct 2026' }
 ];
 
-const getStatusClass = (status) => {
+const getStatusClass = (status: string) => {
     if (status === 'En tiempo') return 'status-good';
     if (status === 'En riesgo') return 'status-warning';
     if (status === 'Retrasado') return 'status-danger';
