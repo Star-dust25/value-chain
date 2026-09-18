@@ -32,6 +32,46 @@ const projects = [
         currentPhase: 'engage',
         status: 'on-track',
         progress: 25
+    },
+    {
+        id: 4,
+        title: 'Auditoría de Seguridad',
+        owner: 'Luis Torres',
+        currentPhase: 'improve',
+        status: 'on-track',
+        progress: 15
+    },
+    {
+        id: 5,
+        title: 'Renovación Infra. Core',
+        owner: 'Ana Silva',
+        currentPhase: 'plan',
+        status: 'on-track',
+        progress: 5
+    },
+    {
+        id: 6,
+        title: 'Integración de API Pagos',
+        owner: 'Sofía Castro',
+        currentPhase: 'build',
+        status: 'at-risk',
+        progress: 50
+    },
+    {
+        id: 7,
+        title: 'Lanzamiento App Rutas',
+        owner: 'Carlos Ruiz',
+        currentPhase: 'deliver',
+        status: 'on-track',
+        progress: 95
+    },
+    {
+        id: 8,
+        title: 'Dashboard Cadena de Valor',
+        owner: 'Tú',
+        currentPhase: 'deliver',
+        status: 'on-track',
+        progress: 90
     }
 ];
 
@@ -578,6 +618,21 @@ const getPhaseStatus = (currentPhaseId: string, phaseId: string) => {
                 document.dispatchEvent(event);
             });
         });
+
+        // Filter projects logic
+        document.addEventListener('filterProjects', ((e: CustomEvent) => {
+            const query = e.detail.query.toLowerCase();
+            projectCards.forEach(card => {
+                const title = card.getAttribute('data-project-title')?.toLowerCase() || '';
+                const owner = card.getAttribute('data-project-owner')?.toLowerCase() || '';
+                
+                if (title.includes(query) || owner.includes(query)) {
+                    (card as HTMLElement).style.display = '';
+                } else {
+                    (card as HTMLElement).style.display = 'none';
+                }
+            });
+        }) as EventListener);
 
         const resetModalPos = () => {
             if (!itilModal) return;

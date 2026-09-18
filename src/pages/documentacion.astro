@@ -25,20 +25,30 @@ import Header from '../components/Header.astro';
                     
                     <div class="doc-content mockup-content">
                         <h2>Plan de Implementación y Diseño</h2>
-                        <p>Esta página simula un repositorio de documentos asociados al proyecto. Aquí se incluirían enlaces a Confluence, Jira, repositorios de código y artefactos de arquitectura.</p>
+                        <p>Esta página simula un repositorio de documentos asociados al proyecto. En un entorno real, aquí se incluirían enlaces a herramientas como Confluence, Jira, repositorios de código (GitHub/GitLab) y diagramas de arquitectura.</p>
                         
-                        <div class="skeleton-text">
-                            <div class="sk-line full"></div>
-                            <div class="sk-line full"></div>
-                            <div class="sk-line mid"></div>
-                        </div>
+                        <p>El propósito principal de esta sección es proveer a los equipos técnicos y de negocio un lugar centralizado para consultar la <strong>visión del producto</strong>, el estado de los entregables y las dependencias críticas. Al tener la documentación integrada en la Cadena de Valor, nos aseguramos de que no existan cuellos de botella por falta de información.</p>
                         
                         <br>
-                        <h3>Métricas de Éxito Definidas</h3>
-                        <div class="skeleton-text">
-                            <div class="sk-line full"></div>
-                            <div class="sk-line short"></div>
+                        <div class="heading-with-tooltip">
+                            <h3>Métricas de Éxito Definidas</h3>
+                            <div class="tooltip-container">
+                                <svg class="info-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                </svg>
+                                <div class="tooltip-text">
+                                    <strong>ITIL 4: Foco en el Valor</strong><br/>
+                                    En ITIL 4, no basta con entregar tecnología; se debe demostrar que genera beneficios reales. Estas métricas aseguran que TI y Negocio estén alineados sobre cómo se medirá el éxito del servicio una vez desplegado.
+                                </div>
+                            </div>
                         </div>
+                        <ul>
+                            <li><strong>Reducción de incidentes post-despliegue:</strong> Meta de disminuir los bugs reportados en un 25% en el primer trimestre.</li>
+                            <li><strong>Adopción de usuarios:</strong> Alcanzar un 80% de migración de usuarios activos hacia la nueva plataforma.</li>
+                            <li><strong>Mejora en el SLA:</strong> Mantener un tiempo de respuesta promedio inferior a 2 horas para tickets de nivel 1.</li>
+                        </ul>
                     </div>
                 </div>
             </main>
@@ -127,4 +137,71 @@ import Header from '../components/Header.astro';
     .sk-line.full { width: 100%; }
     .sk-line.mid { width: 70%; }
     .sk-line.short { width: 40%; }
+
+    /* Tooltip Styles */
+    .heading-with-tooltip {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+        margin-top: 20px;
+    }
+
+    .heading-with-tooltip h3 {
+        margin: 0;
+    }
+
+    .tooltip-container {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        cursor: help;
+        color: var(--accent-color);
+    }
+
+    .info-icon {
+        transition: color 0.2s;
+    }
+
+    .tooltip-container:hover .info-icon {
+        color: var(--primary-color);
+    }
+
+    .tooltip-text {
+        visibility: hidden;
+        opacity: 0;
+        width: 320px;
+        background-color: var(--primary-color);
+        color: #fff;
+        text-align: left;
+        border-radius: 8px;
+        padding: 12px 15px;
+        position: absolute;
+        z-index: 10;
+        bottom: 150%;
+        left: 50%;
+        transform: translateX(-50%) translateY(10px);
+        transition: all 0.3s ease;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        pointer-events: none;
+    }
+
+    .tooltip-text::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -8px;
+        border-width: 8px;
+        border-style: solid;
+        border-color: var(--primary-color) transparent transparent transparent;
+    }
+
+    .tooltip-container:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
 </style>

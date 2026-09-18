@@ -16,8 +16,20 @@ import ProjectModal from '../components/ProjectModal.astro';
             
             <main class="dashboard-content">
                 <div class="dashboard-header">
-                    <h1>Resumen de la Cadena de Valor</h1>
-                    <p>Métricas y estado de proyectos alineados a ITIL 4</p>
+                    <div class="header-title-row">
+                        <div>
+                            <h1>Resumen de la Cadena de Valor</h1>
+                            <p>Métricas y estado de proyectos alineados a ITIL 4</p>
+                        </div>
+                        <button class="btn-primary" id="btnWhatIsItil">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                            ¿Qué es ITIL 4?
+                        </button>
+                    </div>
                 </div>
 
                 <div class="metrics-grid">
@@ -80,8 +92,35 @@ import ProjectModal from '../components/ProjectModal.astro';
         gap: 8px;
     }
 
+    .header-title-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .btn-primary {
+        display: flex;
+        align-items: center;
+        background: var(--primary-color);
+        border: 1px solid var(--primary-color);
+        color: var(--text-light);
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+        background: #1a451d;
+    }
+
     .dashboard-header h1 {
         font-size: 1.8rem;
+        margin: 0 0 5px 0;
     }
 
     .dashboard-header p {
@@ -264,8 +303,38 @@ import ProjectModal from '../components/ProjectModal.astro';
     </div>
 </div>
 
+<!-- General ITIL 4 Intro Modal -->
+<div class="kpi-modal-overlay" id="itilIntroOverlay"></div>
+<div class="kpi-modal" id="itilIntroModal" style="max-width: 600px;">
+    <div class="kpi-modal-header">
+        <h2>¿Qué es ITIL 4?</h2>
+        <button class="kpi-modal-close" id="itilIntroClose" aria-label="Cerrar modal">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+    </div>
+    <div class="kpi-modal-body">
+        <div class="kpi-modal-section">
+            <p><strong>ITIL 4</strong> es el marco de trabajo líder a nivel mundial para la Gestión de Servicios de TI (ITSM). A diferencia de versiones anteriores, ITIL 4 deja de ver a TI como un simple "departamento de soporte técnico" y lo transforma en un <strong>co-creador de valor</strong> para el negocio.</p>
+        </div>
+        
+        <div class="kpi-modal-section">
+            <h3>La Cadena de Valor del Servicio (Service Value Chain)</h3>
+            <p>Es el modelo operativo central de ITIL 4. En lugar de ser un proceso lineal y rígido, es un modelo flexible compuesto por 6 actividades interconectadas. Cada vez que el negocio tiene una demanda (ej. una nueva funcionalidad de la app), TI combina estas actividades para convertir esa demanda en un producto de valor.</p>
+        </div>
+        
+        <div class="kpi-modal-section impact-section">
+            <h3>¿Por qué usamos este Dashboard?</h3>
+            <p>Este dashboard aplica la teoría de ITIL 4 a la práctica. Nos permite monitorear cómo fluyen nuestros proyectos a lo largo de las actividades de la Cadena de Valor, garantizando que el equipo de Desarrollo y el equipo de Soporte no trabajen aislados (Silos), sino de forma integrada para reducir tiempos de entrega y mejorar la satisfacción de los usuarios finales.</p>
+        </div>
+    </div>
+</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        // KPI Modal logic
         const modal = document.getElementById('kpiModal');
         const overlay = document.getElementById('kpiModalOverlay');
         const closeBtn = document.getElementById('kpiModalClose');
@@ -308,9 +377,34 @@ import ProjectModal from '../components/ProjectModal.astro';
         if (closeBtn) closeBtn.addEventListener('click', closeModal);
         if (overlay) overlay.addEventListener('click', closeModal);
 
+        // ITIL Intro Modal logic
+        const introModal = document.getElementById('itilIntroModal');
+        const introOverlay = document.getElementById('itilIntroOverlay');
+        const introBtn = document.getElementById('btnWhatIsItil');
+        const introClose = document.getElementById('itilIntroClose');
+
+        const closeIntroModal = () => {
+            if (introModal && introOverlay) {
+                introModal.classList.remove('active');
+                introOverlay.classList.remove('active');
+            }
+        };
+
+        if (introBtn && introModal && introOverlay) {
+            introBtn.addEventListener('click', () => {
+                introModal.classList.add('active');
+                introOverlay.classList.add('active');
+            });
+        }
+
+        if (introClose) introClose.addEventListener('click', closeIntroModal);
+        if (introOverlay) introOverlay.addEventListener('click', closeIntroModal);
+
+        // Escape key for all modals
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeModal();
+                closeIntroModal();
             }
         });
     });
